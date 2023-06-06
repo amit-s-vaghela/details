@@ -1,0 +1,144 @@
+https://www.youtube.com/watch?v=fXLxtQRNiIU
+
+https://github.com/Magestudy/Magestudy/blob/main/docker-compose.yml
+
+Download magento
+------------------------------------------------------------------------------------------------------------------
+composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.5 
+or
+composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition docker_magento --ignore-platform-reqs
+-------------------------------------------------------------------------------------------------------------------
+create folder >> docker-setup/docker_magento
+move magento docker_magento folder
+
+----------------------------------------------------------------------------
+create >> docker-setup/docker-compose.yml
+-----------------------------------------------------------------------------
+
+version: '3'
+services:
+   web:
+       image: webdevops/php-apache-dev:8.1
+       container_name: web
+       restart: always
+       user: application
+       environment:
+         - WEB_ALIAS_DOMAIN=local.domain.com
+         - WEB_DOCUMENT_ROOT=/app/pub
+         - PHP_DATE_TIMEZONE=EST
+         - PHP_DISPLAY_ERRORS=1
+         - PHP_MEMORY_LIMIT=2048M
+         - PHP_MAX_EXECUTION_TIME=300
+         - PHP_POST_MAX_SIZE=500M
+         - PHP_UPLOAD_MAX_FILESIZE=1024M
+       volumes:
+         - /home/user/htdocs/docker-setup/docker_magento:/app:cached (## magento installation path)
+       ports:
+         - "80:80"
+         - "443:443"
+         - "32823:22"
+       links:
+         - mysql
+   mysql:
+       image: mariadb:10.6
+       container_name: mysql
+       restart: always
+       ports:
+         - "3306:3306"
+       environment:
+         - MYSQL_ROOT_PASSWORD=root
+         - MYSQL_DATABASE=magento2.4.5
+       volumes:
+         - db-data:/var/lib/mysql
+   phpmyadmin:
+       container_name: phpmyadmin
+       restart: always
+       image: phpmyadmin/phpmyadmin:latest
+       environment:
+         - MYSQL_ROOT_PASSWORD=root
+         - PMA_USER=root
+         - PMA_PASSWORD=root
+       ports:
+         - "8080:80"
+       links:
+         - mysql:db
+       depends_on:
+         - mysql
+   elasticsearch:
+        container_name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+        environment:
+          - ELASTICSEARCH_URL=http://elasticsearch:9200
+          - node.name=elasticsearch
+          - cluster.name=es-docker-cluster
+          - discovery.type=single-node
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+        volumes:
+          - magento-es-data:/usr/share/elasticsearch/data
+        ports:
+          - 9200:9200
+volumes:
+   db-data:
+       external: false
+   magento-es-data:
+        external: false
+------------------------------------------------------------------------------------------------------------
+
+
+terminal
+
+docker stop `docker ps -q`‍
+
+docker-setup >> sudo -- sh -c "echo '127.0.0.1 local.domain.com' >> /etc/hosts"
+
+docker-setup >> docker-compose up -d --build
+
+cd app 
+ >> docker exec -it web bash
+
+cd app 
+ php bin/magento setup:install --admin-firstname=Amit --admin-lastname=Vaghela --admin-email=amiitvaghela@gmail.com --admin-user=admin --admin-password='admin@123' --base-url=https://local.domain.com --base-url-secure=https://local.domain.com --backend-frontname=admin --db-host=mysql --db-name=magento2.4.5 --db-user=root --db-password=root --use-rewrites=1 --language=en_US --currency=USD --timezone=America/New_York --search-engine=elasticsearch7 --elasticsearch-host="elasticsearch" --elasticsearch-port=9200
+
+
+php bin/magento cache:clean
+php bin/magento cache:flush
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy -f
+php bin/magento setup:di:compile
+php bin/magento indexer:reindex
+
+database issue
+----------------------------------------------------------------------------------------
+Edit file app/etc/di.xml
+
+You can specify acceptable MariaDB versions here - currently 10.2-10.4
+
+Example to allow MariaDB 10.6
+
+<item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item> ## change version 
+----------------------------------------------------------------------------------------
+
+
+http://localhost:8080/ PHPADMIN
+
+
+docker stop `docker ps -q`‍
+docker-compose down --remove-orphans
+docker-compose down
+
+
+docker-setup >> sudo -- sh -c "echo '127.0.0.1 local.points4purpose.com.au' >> /etc/hosts"
+
+sudo -- sh -c "echo '127.0.0.1 local.magento246.com' >> /etc/hosts"
+
+https://local.magento246.com/
+
+php bin/magento setup:install --admin-firstname=Amit --admin-lastname=Vaghela --admin-email=amiitvaghela@gmail.com --admin-user=admin --admin-password='admin@123' --base-url=https://local.samplemagento242.com/ --base-url-secure=https://local.samplemagento242.com/ --backend-frontname=admin --db-host=mysql --db-name=samplemagento242 --db-user=root --db-password=root --use-rewrites=1 --language=en_US --currency=USD --timezone=America/New_York --search-engine=elasticsearch7 --elasticsearch-host="elasticsearch" --elasticsearch-port=9200
+
+
+php bin/magento setup:install --admin-firstname=Admin --admin-lastname=Admin --admin-email=amiitvaghela@gmail.com --admin-user=admin --admin-password='admin@123' --base-url=https://local.magento246.com/ --base-url-secure=https://local.magento246.com/ --backend-frontname=admin --db-host=mysql --db-name=magento2_4_6 --db-user=root --db-password=root --use-rewrites=1 --language=en_US --currency=USD --timezone=America/New_York --search-engine=elasticsearch7 --elasticsearch-host="elasticsearch" --elasticsearch-port=9200
