@@ -1,0 +1,82 @@
+user : hardikg@devstree.com
+pass : Devstree@2023
+
+Username: krishnadhungana@hotmail.com
+Password : Surfing12
+--------------------------------------------------
+Dev
+----------------------------------------------------
+
+clent id :A90DDD8E-D419-4B92-BA99-72D3AB5DF269
+ Client Secret:z/BJNq7BWdojhnyeGl6S1m511ivJVbZP73NfD4qqla8=
+
+---------------------------------------------------------
+https://dev.points4purpose.com.au/customer/account/login/
+customer :amitv.devstree@gmail.com
+Password :amit@123
+
+---------------------------------------------------------
+
+git config --global user.email "hardikg@devstree.com"
+git config --global user.name "hardik"
+
+
+bin/magento-docker bash
+
+docker cp p4p.sql mysql:/
+docker compose exec -it mysql bash
+mysql -u root -p p4p < p4p.sql
+
+docker compose up -d
+docker compose exec -it web bash
+cd app 
+docker exec -it web bash
+
+docker ps (ls)
+docker rm -f 5ac211a4eb49257296168bff2236873b911beceee7813b544f89a0385ee9df26
+
+docker compose down  
+docker stop `docker ps -q`‍
+docker rm -f /elasticsearch
+docker rm -f /mysql
+docker rm -f /web
+docker rm -f /phpmyadmin
+docker compose exec -it mysql bash
+
+docker-setup$ >> docker compose stop web
+docker-setup$ >> docker compose rm web
+docker-setup$ >> docker compose up -d
+
+
+mysql -u root -p p4p < p4p.sql
+
+/app/app/design/frontend/Magento/luma_child/Magento_Theme/templates/html/topmenu.phtml
+
+
+Email: points4purpose.systemuser@pokitpal.com
+PW: p4pstaging123#
+
+
+redis-cli flushall
+
+
+
+git
+git checkout staging
+git pull origin
+
+
+/app/design/frontend/Magento/luma_child/Magento_Catalog/templates/product/list.phtml
+77d7907b64e072f560f037978b23b2fef2d25af2abb30e6304fd2088027c1a78
+
+
+
+
+https://api.pokitpal.com/v1/FeaturedOffers/online
+https://api.pokitpal.com/v1/InstoreOffers
+https://api.pokitpal.com/v1/Association
+https://api.pokitpal.com/v1/OnlineOffers
+https://api.pokitpal.com/v1/Offers/GetAllCategories
+
+
+
