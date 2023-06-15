@@ -248,14 +248,9 @@ https://meetanshi.com/blog/install-magento-2-4-2-on-localhost-using-xampp/
 ---------------------------------------------------------------------------
 
 
-https://w3techs.com/sites/info/zeeline.com
 
-https://meetanshi.com/blog/perform-crud-operations-using-api-in-magento-2/
 https://www.rohanhapani.com/magento-2-get-product-image-url-in-rest-api/
 
-
-
-http://magentoexpertforum.com/forumdisplay.php/3-Document-amp-Tutorial?tabid=72
 
 
 install magento 242
@@ -486,7 +481,6 @@ http://local.magento243.com/rest/V1/integration/admin/token?username=admin&passw
 
 https://www.magedelight.com/resources/how-to-add-a-new-customer-address-by-rest-api-in-magento-2/
 
-https://meetanshi.com/blog/perform-crud-operations-using-api-in-magento-2/
 
 
 sudo service elasticsearch status
@@ -896,6 +890,10 @@ https://blog.imagineer.co/en-us/e-commerce/magento/how-to-create-a-simple-web-ap
 ajax load default related product wia ajax
 https://dev98.de/2020/09/14/ajax-loading-of-related-products-in-magento-2/
 
+call -> http://milandev.me/magento-2-how-to-get-external-api-value-in-the-ui-component-form-by-adding-a-custom-html-button/
+        http://milandev.me/tag/magento2/
+
+
 
 https://www.rootways.com/blog/magento-2-get-customer-by-email-using-rest-api
 
@@ -933,3 +931,13 @@ php bin/magento admin:user:create --admin-user="amit" --admin-password="amit@123
 
 
 php bin/magento admin:user:create --admin-user=amit --admin-password=amit@123 --admin-email=hi@mageplaza.com --admin-firstname=Mageplaza --admin-lastname=Family
+
+
+https://www.classcentral.com/course/youtube-magento-2-tutorial-step-by-step-in-hindi-65164
+
+
+
+php -m
+php --ini
+grep -r 'mysql' /etc/php/8.1
+sudo nano /etc/php/8.1/cli/php.ini
