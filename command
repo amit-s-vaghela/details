@@ -941,3 +941,9 @@ php -m
 php --ini
 grep -r 'mysql' /etc/php/8.1
 sudo nano /etc/php/8.1/cli/php.ini
+
+<div role="alert" class="messages">
+    <div class="message-warning warning message">
+        <div><strong><?php echo $block->escapeHtml(__(' After Payment complete your order.')) ?></strong></div>
+    </div>
+</div>
