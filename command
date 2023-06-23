@@ -947,3 +947,5 @@ https://magento.stackexchange.com/questions/219457/add-message-on-product-page
         <div><strong><?php echo $block->escapeHtml(__(' After Payment complete your order.')) ?></strong></div>
     </div>
 </div>
+
+https://www.thecoachsmb.com/magento2-database-structure/
