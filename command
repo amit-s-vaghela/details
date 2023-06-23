@@ -949,3 +949,4 @@ https://magento.stackexchange.com/questions/219457/add-message-on-product-page
 </div>
 
 https://www.thecoachsmb.com/magento2-database-structure/
+https://www.mgt-commerce.com/tutorial/how-to-backup-magento-2/
