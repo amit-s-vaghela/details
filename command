@@ -81,7 +81,7 @@ sudo systemctl stop elasticsearch
 
 (cmd untar file )  : -> tar xvzf Magento-CE-2.3.4.tar.gz 
 
- chmod -R 777 var/ pub/ generated/ app/
+chmod -R 777 var/ pub/ generated/ app/
 
 rm -rf var/page_cache/* var/cache/* var/generation/* generated/code pub/static/frontend/
 
@@ -111,7 +111,7 @@ zip -r app.zip app/
 --------------------------------------------------
 mysqldump -u root -p magento225 > magento225_backup.sql
 
-mysqldump -u root -p tgs_new > backupname.sql
+mysqldump -u root -p magento2_4_6 > magento2_4_6.sql
 
 mysqldump -u root -p tadmin_final > tadmin_final.sql
 
@@ -941,12 +941,22 @@ php -m
 php --ini
 grep -r 'mysql' /etc/php/8.1
 sudo nano /etc/php/8.1/cli/php.ini
-https://magento.stackexchange.com/questions/219457/add-message-on-product-page
-<div role="alert" class="messages">
-    <div class="message-warning warning message">
-        <div><strong><?php echo $block->escapeHtml(__(' After Payment complete your order.')) ?></strong></div>
-    </div>
-</div>
 
-https://www.thecoachsmb.com/magento2-database-structure/
-https://www.mgt-commerce.com/tutorial/how-to-backup-magento-2/
+
+php bin/magento setup:db-declaration:generate-whitelist --module-name=Vendic_OfflinePayments
+
+
+https://www.youtube.com/watch?v=_0nWTO4jWEA&t=539s
+
+proxy : https://www.youtube.com/watch?v=l41_ulBvscA&list=UULFhb7DM9SspzrUVh4hnWL50A&index=15
+
+overide : https://www.youtube.com/watch?v=uiJ-rugd3HE
+          https://www.youtube.com/watch?v=Q3qdRue5wiA
+
+          https://www.youtube.com/watch?v=WzSB3FbtXYE
+
+https://www.youtube.com/watch?v=l41_ulBvscA&list=UULFhb7DM9SspzrUVh4hnWL50A&index=18
+
+php bin/magento module:status --enabled|grep -i "paypal"
+
+
