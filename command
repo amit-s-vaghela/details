@@ -1,3 +1,6 @@
+user : amitv.devstree@gmail.com /amitvdevst97ac
+pass : Amitdevstree@123
+
 
 composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.2.5.
 
