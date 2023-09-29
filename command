@@ -963,3 +963,107 @@ https://www.youtube.com/watch?v=l41_ulBvscA&list=UULFhb7DM9SspzrUVh4hnWL50A&inde
 php bin/magento module:status --enabled|grep -i "paypal"
 
 
+
+
+
+http://parts/pub/rest/V1/carts/mine/items
+http://parts/pub/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=customer_id&searchCriteria[filter_groups][0][filters][0][value]=23471&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
+
+
+
+---------------------------------------------------------------------
+CREATE ADMIN TOKEN IN LOCAL
+---------------------------------------------------------------------
+
+http://127.0.0.1/phonelcdparts/pub/rest/V1/integration/admin/token?username=AMIT&password=AMIT2023
+
+
+---------------------------------------------------------------------
+CREATE CUSTOMER TOKEN IN LOCAL
+---------------------------------------------------------------------
+first create custome
+
+http://127.0.0.1/phonelcdparts/pub/rest/V1/integration/customer/token
+
+Action:POST
+
+Body json
+
+{
+    "username":"amit@phonelcdparts.com", "password":"amit@123"
+}
+
+
+token : hem55k2dmr2kfojcq5mhisbe8ptpobk8
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Add customer token 
+url : http://127.0.0.1/phonelcdparts/pub/rest/V1/carts/mine/items
+
+
+{  "cartItem":{
+ "sku": "SGS7-NBR-RED",
+ "qty": 1,
+ "quote_id": "156722"}
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+ref : https://www.atwix.com/magento-2/adding-custom-attribute-to-api-response-in-magento-2/
+
+admin token
+http://127.0.0.1/phonelcdparts/pub/rest/V1/integration/admin/token?username=AMIT&password=AMIT2023
+
+Add admin token
+
+Action:GET
+
+url :  http://127.0.0.1/phonelcdparts/pub/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=customer_id&searchCriteria[filter_groups][0][filters][0][value]=23471&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+http://127.0.0.1/phonelcdparts/pub/rest/V1/carts/mine/items
+
+Add Cart to product
+
+step : 1
+-----------------------
+http://127.0.0.1/phonelcdparts/pub/rest/V1/carts/mine
+Action :POST
+
+json Body
+
+{
+    "customer_id":"23477"
+}
+
+click send
+-----------------------------------------------------------------
+responce
+-----------------------------------------------------------------
+
+quote_id -> 156725
+
+
+step :2
+-----------------------------------------------------------
+Add Product to cart 
+get first quote id step1
+
+http://127.0.0.1/phonelcdparts/pub/rest/default/V1/carts/mine/items
+
+json Body
+
+{
+  "cartItem": {
+    "sku": "SGS7-NBR-SLVR",
+    "qty": 1,
+    "quote_id": "156725"
+  }
+}
+Action :POST
+
+click send
+
+
