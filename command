@@ -1065,5 +1065,16 @@ json Body
 Action :POST
 
 click send
+---------------------------------------------------------------------------------
+add Admin Token
+Action POST
+http://127.0.0.1/phonelcdparts/pub/rest/V1/customers
 
-
+{
+   "customer" : {
+      "lastname" : "Doe",
+      "firstname" : "Jane",
+      "email" : "jdoe@example.com"
+   },
+   "password" : "Password1"
+}
