@@ -1082,7 +1082,7 @@ http://127.0.0.1/phonelcdparts/pub/rest/V1/customers
 http://127.0.0.1/phonelcdparts/pub/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=customer_id&searchCriteria[filter_groups][0][filters][0][value]=23477&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
 
 add admin token
-action post
+action Get
 
 /var/www/html/phonelcdparts/app/code/SoftWebPos/MobileApi/etc/extension_attributes.xml
 <?xml version="1.0"?>
