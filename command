@@ -1078,3 +1078,122 @@ http://127.0.0.1/phonelcdparts/pub/rest/V1/customers
    },
    "password" : "Password1"
 }
+
+http://127.0.0.1/phonelcdparts/pub/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=customer_id&searchCriteria[filter_groups][0][filters][0][value]=23477&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
+
+add admin token
+action post
+
+/var/www/html/phonelcdparts/app/code/SoftWebPos/MobileApi/etc/extension_attributes.xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
+        <attribute code="my_custom_product_attribute" type="string"/>
+    </extension_attributes>
+</config>
+
+/var/www/html/phonelcdparts/app/code/SoftWebPos/MobileApi/etc/di.xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="SoftWebPos\MobileApi\Api\CmsBestSeller" type="SoftWebPos\MobileApi\Model\Api\CmsBestSeller"/>
+    <preference for="SoftWebPos\MobileApi\Api\CmsNewProduct" type="SoftWebPos\MobileApi\Model\Api\CmsNewProduct"/>
+ <!-- Add image url in order api  -->
+    <!-- <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="image_url_add_order_extension_attribute" type="SoftWebPos\MobileApi\Plugin\OrderRepositoryPlugin" />
+    </type> -->
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <plugin name="order_item_custom_attribute" type="SoftWebPos\MobileApi\Plugin\AddCustomProductAttribute" />
+     </type>
+    <preference for="Magedelight\Cgr\Observer\ValidateRestrictedProducts" type="SoftWebPos\MobileApi\Observer\ValidateRestrictedProducts" />
+
+</config>
+
+/var/www/html/phonelcdparts/app/code/SoftWebPos/MobileApi/Plugin/AddCustomProductAttribute.php
+<?php
+
+namespace SoftWebPos\MobileApi\Plugin;
+
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Api\Data\OrderItemExtensionFactory;
+use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
+
+use Magento\Catalog\Api\ProductRepositoryInterfaceFactory as ProductRepository;
+use Magento\Catalog\Helper\ImageFactory as ProductImageHelper;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Store\Model\App\Emulation as AppEmulation;
+
+
+
+class AddCustomProductAttribute
+{
+    
+    protected $productRepository;
+
+    protected $productImageHelper;
+
+    protected $storeManager;
+
+    protected $appEmulation;
+
+    protected $orderItemExtensionFactory;
+
+    protected $productFactory;
+
+    public function __construct(
+        ProductRepository $productRepository,
+        ProductImageHelper $productImageHelper,
+        StoreManager $storeManager,
+        AppEmulation $appEmulation,
+        OrderItemExtensionFactory $orderItemExtensionFactory,
+        ProductFactory $productFactory
+    ) {
+        $this->productRepository = $productRepository;
+        $this->productImageHelper = $productImageHelper;
+        $this->storeManager = $storeManager;
+        $this->appEmulation = $appEmulation;
+        $this->orderItemExtensionFactory = $orderItemExtensionFactory;
+        $this->productFactory = $productFactory;
+    }
+     
+    public function afterGet(OrderItemRepositoryInterface $subject, OrderItemInterface $orderItem)
+    {
+        $product = $this->productRepository->create()->getById($orderItem->getProductId());
+ 
+        $extensionAttributes = $orderItem->getExtensionAttributes();
+        $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
+        $imageurl = $this->getImageUrl($product, 'product_thumbnail_image');
+         $extensionAttributes->setMyCustomProductAttribute($imageurl);
+        $orderItem->setExtensionAttributes($extensionAttributes);
+
+        return $orderItem;
+    }
+
+    public function afterGetList(OrderItemRepositoryInterface $subject, OrderItemSearchResultInterface $searchResult)
+    {
+        $orders = $searchResult->getItems();
+
+        foreach ($orders as &$item) {
+
+            $product = $this->productRepository->create()->getById($item->getProductId());
+            $extensionAttributes = $item->getExtensionAttributes();
+            $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
+            $imageurl = $this->getImageUrl($product, 'product_thumbnail_image');
+            $extensionAttributes->setMyCustomProductAttribute($imageurl);
+            $item->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $searchResult;
+    }
+
+    protected function getImageUrl($product, string $imageType = '')
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+        $this->appEmulation->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND, true);
+        $imageUrl = $imageUrl = $this->productImageHelper->create()->init($product, $imageType)->getUrl();
+        $this->appEmulation->stopEnvironmentEmulation();
+        return $imageUrl;
+    }
+    
+}
