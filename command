@@ -1197,3 +1197,60 @@ class AddCustomProductAttribute
     }
     
 }
+create column table sales_order_item
+pass extension atribute in payload
+save attibutes in order item table =>https://fooman.com/blog/an-introduction-to-extension-attributes.html
+etc/webapi_rest/di.xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="save_custom_data" type="Designnbuy\Base\Plugin\OrderSavePlugin"/>
+    </type>
+</config>
+
+<?php
+/**
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Designnbuy\Base\Plugin;
+
+use Magento\Framework\Exception\CouldNotSaveException;
+
+class OrderSavePlugin
+{
+
+    /**
+     * Save gift message
+     *
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
+     * @param \Magento\Sales\Api\Data\OrderInterface $resultOrder
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws CouldNotSaveException
+     */
+    public function afterSave(
+        \Magento\Sales\Api\OrderRepositoryInterface $subject,
+        \Magento\Sales\Api\Data\OrderInterface $resultOrder
+    ) {
+        foreach($resultOrder->getAllItems() as $item){
+
+            $extensionAttributes = $item->getExtensionAttributes();
+            $pdfData  = $extensionAttributes->getPdfData();
+            $jsonData = $extensionAttributes->getJsonData();
+            $tagData  = $extensionAttributes->getTagData();
+            // echo "<pre>";print_r($extensionAttributes);
+            // echo $item->getId();
+            $item->setPdfData($pdfData);
+            $item->setJsonData($jsonData);
+            $item->setTagData($tagData); 
+            $item->save();
+        }
+        die;
+    }
+
+}
+
+
